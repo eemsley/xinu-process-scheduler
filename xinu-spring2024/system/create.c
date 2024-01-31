@@ -43,6 +43,10 @@ pid32	create(
 	prptr->prprio = priority;
 	prptr->prstkbase = (char *)saddr;
 	prptr->prstklen = ssize;
+  prptr->prcpu = 0;
+  prptr->prresptime = 0;
+  prptr->prctxswcount = 0;
+  prptr->prbeginready = 0;
 	prptr->prname[PNMLEN-1] = NULLCH;
 	for (i=0 ; i<PNMLEN-1 && (prptr->prname[i]=name[i])!=NULLCH; i++)
 		;

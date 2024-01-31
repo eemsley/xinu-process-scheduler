@@ -23,8 +23,6 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	/* Point to process table entry for the current (old) process */
 
 	ptold = &proctab[currpid];
-  ptold->prcpu = currcpu + ptold->prcpu;
-  currcpu = 0;
 
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
 		if (ptold->prprio > firstkey(readylist)) {
@@ -43,6 +41,19 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
+
+
+
+  ptold->prcpu = currcpu + ptold->prcpu;
+  currcpu = 0;
+
+
+  int prresp = clkcounterms - ptnew->prbeginready;
+  if (prresp = 0) prresp = 1;
+  ptnew->prresptime += prresp;
+
+  ptnew->prctxswcount = ptnew->prctxswcount + 1;
+
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
 
 	/* Old process returns here when resumed */

@@ -7,7 +7,7 @@ uint32	ctr1000 = 0;		/* Milliseconds since boot		*/
 qid16	sleepq;			/* Queue of sleeping processes		*/
 uint32	preempt;		/* Preemption counter			*/
 uint32 clkcounterms=0; /* ms of clock running  */
-uint32 currcpu=0;
+uint32 volatile currcpu=0;
 /*------------------------------------------------------------------------
  * clkinit  -  Initialize the clock and sleep queue at startup (x86)
  *------------------------------------------------------------------------
