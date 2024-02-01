@@ -33,6 +33,7 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 		ptold->prstate = PR_READY;
 		insert(currpid, readylist, ptold->prprio);
+    ptold->prbeginready = clkcounterms;
 	}
 
 	/* Force context switch to highest priority ready process */
@@ -49,8 +50,11 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 
   int prresp = clkcounterms - ptnew->prbeginready;
-  if (prresp = 0) prresp = 1;
-  ptnew->prresptime += prresp;
+  if (prresp == 0) {
+    prresp = 1;
+  }
+
+  ptnew->prresptime = ptnew->prresptime + prresp;
 
   ptnew->prctxswcount = ptnew->prctxswcount + 1;
 
