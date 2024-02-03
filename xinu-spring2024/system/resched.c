@@ -24,15 +24,17 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	ptold = &proctab[currpid];
 
-	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
+	if (ptold->prstate == PR_CURR) {  /* Process remains eligible, it is CPU bound, demote it's priority */
+    chprio(currpid, dynprio[ptold->prprio].ts_tqexp); //change the priority of the old process
 		if (ptold->prprio > firstkey(readylist)) {
+      preempt = dynprio[ptold->prprio].ts_quantum; //old process keeps running even with demoted priority, change the quantum to match new prio
 			return;
 		}
 
 		/* Old process will no longer remain current */
 
 		ptold->prstate = PR_READY;
-		insert(currpid, readylist, ptold->prprio);
+		insert(currpid, readylist, ptold->prprio); //old process is not top priority, insert in readylist with new priority
     ptold->prbeginready = clkcounterms;
 	}
 
@@ -41,7 +43,8 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	currpid = dequeue(readylist);
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
-	preempt = QUANTUM;		/* Reset time slice for process	*/
+	preempt = dynprio[ptnew->prprio].ts_quantum; //update quantum corresponding to the new process's priority
+  //preempt = QUANTUM;		/* Reset time slice for process	*/
 
 
 

@@ -45,6 +45,9 @@ syscall	sleepms(
 		restore(mask);
 		return SYSERR;
 	}
+  
+  /* PROCESS IS IO BOUND, IT CALLED SLEEPMS(), PROMOTE IT */
+  chprio(currpid, dynprio[proctab[currpid].prprio].ts_slpret); // promote priority of the sleeping process
 
 	proctab[currpid].prstate = PR_SLEEP;
 	resched();

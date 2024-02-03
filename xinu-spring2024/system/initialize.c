@@ -21,6 +21,10 @@ struct	procent	proctab[NPROC];	/* Process table			*/
 struct	sentry	semtab[NSEM];	/* Semaphore table			*/
 struct	memblk	memlist;	/* List of free memory blocks		*/
 
+
+/* Declaration of dynsched table */
+struct dynsched_tab dynprio[11];
+
 /* Active system status */
 
 int	prcount;		/* Total number of live processes	*/
@@ -198,6 +202,30 @@ static	void	sysinit()
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
 	currpid = NULLPROC;
+
+
+  /* initialize the idle process in dynsched table */
+
+  dynprio[0].ts_tqexp = 0;
+  dynprio[0].ts_slpret = 0;
+  dynprio[0].ts_quantum = QUANTUM;
+  
+
+  for (i = 1; i < 11; i++) {
+    if ( i == 1 ) {
+      dynprio[i].ts_tqexp = 1;
+      dynprio[i].ts_slpret = 2;
+      dynprio[i].ts_quantum = 100;
+    } else if ( i == 10 ) {
+      dynprio[i].ts_tqexp = 9;
+      dynprio[i].ts_slpret = 10;
+      dynprio[i].ts_quantum = 10;
+    } else {
+      dynprio[i].ts_tqexp = i-1;
+      dynprio[i].ts_slpret = i+1;
+      dynprio[i].ts_quantum = 110 - 10 * i;
+    }
+  }
 	
 	/* Initialize semaphores */
 
