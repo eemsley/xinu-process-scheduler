@@ -43,6 +43,9 @@ void	clkhandler()
 	/*   remaining time reaches zero			     */
 
 	if((--preempt) <= 0) {
+    //quantum has expired, need to demote this CPU bound process
+    chprio(getpid(), dynprio[proctab[getpid()].prprio].ts_tqexp);
+    proctab[getpid()].remainpreempt = 0;
 		preempt = QUANTUM;
 		resched();
 	}

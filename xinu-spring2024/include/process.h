@@ -2,7 +2,9 @@
 
 /* Maximum number of processes in the system */
 
-#define XINUTEST 1;
+#define XINUTEST 1
+
+#define STOPPINGTIME 8000 /* used in cpubnd, in ms */
 
 #ifndef NPROC
 #define	NPROC		8
@@ -58,6 +60,7 @@ struct procent {		/* Entry in the process table		*/
   uint32 prresptime; /* total time a process spent in the readylist */
   uint32 prctxswcount; /* num times a process is context switched in */
   uint32 prbeginready; /* time the process entered readylist */
+  uint32 remainpreempt; /* if nonzero, the remaining time slice the process is allowed */
 };
 
 /* Marker for the top of a process stack (used to help detect overflow)	*/

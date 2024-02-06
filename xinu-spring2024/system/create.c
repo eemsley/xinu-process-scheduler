@@ -41,6 +41,7 @@ pid32	create(
 	/* Initialize process table entry for new process */
 	prptr->prstate = PR_SUSP;	    /* Initial state is suspended	*/
 	prptr->prprio = 6;            /* ALL PROCESSES COME IN AT 6, can be demoted/promoted */
+  prptr->remainpreempt = 0;
   preempt = dynprio[6].ts_quantum;
 	prptr->prstkbase = (char *)saddr;
 	prptr->prstklen = ssize;

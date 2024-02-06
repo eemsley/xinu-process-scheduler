@@ -3,10 +3,11 @@
 #include <xinu.h>
 
 void greetings(void);
+void cpubnd(void);
 
 process	main(void)
 {
-  #ifdef XINUTEST
+  #ifdef XINUDEBUG
     kprintf("Testing prresptime, prctxswcount, prbeginready, responsetime(pid)\n\n");
     kprintf("main prresptime: %d\n", proctab[getpid()].prresptime);
     kprintf("main ctxsw count: %d\n", proctab[getpid()].prctxswcount);
@@ -30,6 +31,15 @@ process	main(void)
     kprintf("lowgreet prbeginready: %d\n", proctab[lowgreet].prbeginready);
     kprintf("clkcounterms: %d\n", clkcounterms);
     kprintf("lowgreet responsetime: %d\n", responsetime(lowgreet));
-
   #endif
+
+  chprio(getpid(), 10);
+  resume( ( create(iobnd, 9086, 6, "cpu1", 0) ) );
+  resume( ( create(iobnd, 9086, 6, "cpu2", 0) ) );
+  resume( ( create(iobnd, 9086, 6, "cpu3", 0) ) );
+  resume( ( create(iobnd, 9086, 6, "cpu4", 0) ) );
+  resume( ( create(iobnd, 9086, 6, "cpu5", 0) ) );
+  resume( ( create(iobnd, 9086, 6, "cpu6", 0) ) );
+
+
 }
