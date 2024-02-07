@@ -1,7 +1,6 @@
 #include <xinu.h>
 
-
-int responsetime(pid32 pid) {
+syscall responsetime(pid32 pid) {
   if (proctab[pid].prctxswcount == 0) {
     return clkcounterms - proctab[pid].prbeginready;
   }

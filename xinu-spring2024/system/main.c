@@ -7,6 +7,7 @@ void cpubnd(void);
 
 process	main(void)
 {
+  /*
   #ifdef XINUDEBUG
     kprintf("Testing prresptime, prctxswcount, prbeginready, responsetime(pid)\n\n");
     kprintf("main prresptime: %d\n", proctab[getpid()].prresptime);
@@ -31,15 +32,16 @@ process	main(void)
     kprintf("lowgreet prbeginready: %d\n", proctab[lowgreet].prbeginready);
     kprintf("clkcounterms: %d\n", clkcounterms);
     kprintf("lowgreet responsetime: %d\n", responsetime(lowgreet));
-  #endif
+  #endif */
 
-  chprio(getpid(), 10);
-  resume( ( create(iobnd, 9086, 6, "cpu1", 0) ) );
-  resume( ( create(iobnd, 9086, 6, "cpu2", 0) ) );
-  resume( ( create(iobnd, 9086, 6, "cpu3", 0) ) );
-  resume( ( create(iobnd, 9086, 6, "cpu4", 0) ) );
-  resume( ( create(iobnd, 9086, 6, "cpu5", 0) ) );
-  resume( ( create(iobnd, 9086, 6, "cpu6", 0) ) );
+  chprio(getpid(), 12);
+  resume( ( create(iobnd, 0, 6, "cpu1", 0) ) );
+  resume( ( create(iobnd, 0, 6, "cpu2", 0) ) );
+  resume( ( create(iobnd, 0, 6, "cpu3", 0) ) );
+  resume( ( create(iobnd, 0, 6, "cpu4", 0) ) );
+  resume( ( create(iobnd, 0, 6, "cpu5", 0) ) );
+  resume( ( create(iobnd, 0, 6, "cpu6", 0) ) );
+
 
 
 }

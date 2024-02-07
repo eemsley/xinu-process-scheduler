@@ -33,6 +33,12 @@ syscall	sleepms(
 		return SYSERR;
 	}
 
+  /* CASE 2: IO BOUND, PROMOTE IT */
+  chprio(currpid, dynprio[proctab[currpid].prprio].ts_slpret); // promote priority of the sleeping process
+  proctab[currpid].remainpreempt = 0; //set remaining time slice to 0, it gets a full time slice next run
+  /* CASE 2: IO BOUND */
+
+
 	if (delay == 0) {
 		yield();
 		return OK;
@@ -46,9 +52,7 @@ syscall	sleepms(
 		return SYSERR;
 	}
   
-  /* PROCESS IS IO BOUND, IT CALLED SLEEPMS(), PROMOTE IT */
-  chprio(currpid, dynprio[proctab[currpid].prprio].ts_slpret); // promote priority of the sleeping process
-  proctab[currpid].remainpreempt = 0;
+  
 	proctab[currpid].prstate = PR_SLEEP;
 	resched();
 	restore(mask);

@@ -617,7 +617,7 @@ extern	syscall	yield(void);
 extern void greetings(void);
 
 /* in file responsetime.c */
-extern int responsetime(pid32);
+extern syscall responsetime(pid32);
 
 /* in file cpubnd.c */
 extern void cpubnd(void);

@@ -27,7 +27,7 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible, it has either been interrupted before the quantum expired, or it is cpu_bound */
     if (ptold->prprio > firstkey(readylist)) {
       preempt = dynprio[ptold->prprio].ts_quantum; //old process keeps running even with demoted priority (done in clkhandler), change the quantum to match new prio
-			return;
+      return;
 		}
 
 		/* Old process will no longer remain current... even if prio is the same as the next ready process, we switch it out */
@@ -37,35 +37,30 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 		ptold->prstate = PR_READY;
 		insert(currpid, readylist, ptold->prprio); //old process is not top priority, insert in readylist with new priority
-    ptold->prbeginready = clkcounterms;
-	}
+  }
 
 	/* Force context switch to highest priority ready process */
 
 	currpid = dequeue(readylist);
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
-  if (ptnew->remainpreempt > 0) {
+
+  ptold->prcpu = currcpu + ptold->prcpu;
+  currcpu = 0;
+  int prresp = clkcounterms - ptnew->prbeginready;
+  if (prresp == 0) {
+    prresp = 1;
+  }
+  ptnew->prresptime = ptnew->prresptime + prresp;
+  ptnew->prctxswcount = ptnew->prctxswcount + 1;
+
+
+   if (ptnew->remainpreempt > 0) {
     preempt = ptnew->remainpreempt;
   } else {
 	  preempt = dynprio[ptnew->prprio].ts_quantum; //update quantum corresponding to the new process's priority
   }
   //preempt = QUANTUM;		/* Reset time slice for process	*/
-
-
-
-  ptold->prcpu = currcpu + ptold->prcpu;
-  currcpu = 0;
-
-
-  int prresp = clkcounterms - ptnew->prbeginready;
-  if (prresp == 0) {
-    prresp = 1;
-  }
-
-  ptnew->prresptime = ptnew->prresptime + prresp;
-
-  ptnew->prctxswcount = ptnew->prctxswcount + 1;
 
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
 

@@ -32,5 +32,7 @@ status	insert(
 	queuetab[pid].qkey = key;
 	queuetab[prev].qnext = pid;
 	queuetab[curr].qprev = pid;
-	return OK;
+  proctab[pid].prbeginready = clkcounterms;
+
+  return OK;
 }
