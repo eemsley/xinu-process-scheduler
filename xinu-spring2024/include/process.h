@@ -2,8 +2,6 @@
 
 /* Maximum number of processes in the system */
 
-#define XINUTEST 1
-
 #define STOPPINGTIME 8000 /* used in cpubnd, in ms */
 
 #ifndef NPROC

@@ -625,6 +625,9 @@ extern void cpubnd(void);
 /* in file iobnd */
 extern void iobnd(void);
 
+/* in file joker.c */
+extern void joker(void);
+
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
 #define	htons(x)  ((0xff & ((x)>>8)) | ((0xff & (x)) << 8))
 #define	htonl(x)  ((((x)>>24) & 0x000000ff) | (((x)>> 8) & 0x0000ff00) | \

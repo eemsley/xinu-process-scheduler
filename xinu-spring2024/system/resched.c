@@ -25,6 +25,7 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptold = &proctab[currpid];
 
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible, it has either been interrupted before the quantum expired, or it is cpu_bound */
+    if (ptold->prprio == 12) return;
     if (ptold->prprio > firstkey(readylist)) {
       preempt = dynprio[ptold->prprio].ts_quantum; //old process keeps running even with demoted priority (done in clkhandler), change the quantum to match new prio
       return;
@@ -58,7 +59,11 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
    if (ptnew->remainpreempt > 0) {
     preempt = ptnew->remainpreempt;
   } else {
-	  preempt = dynprio[ptnew->prprio].ts_quantum; //update quantum corresponding to the new process's priority
+    if (ptnew->prprio == 12) {
+      preempt = QUANTUM;
+    } else {
+	    preempt = dynprio[ptnew->prprio].ts_quantum; //update quantum corresponding to the new process's priority
+    }
   }
   //preempt = QUANTUM;		/* Reset time slice for process	*/
 

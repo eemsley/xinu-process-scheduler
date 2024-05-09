@@ -45,9 +45,11 @@ void	clkhandler()
 	if((--preempt) <= 0) {
     
     /* CASE 1: CPU BOUND, quantum has expired, need to demote */
-    chprio(getpid(), dynprio[proctab[getpid()].prprio].ts_tqexp); //demote process for next time
+    if (proctab[getpid()].prprio != 12) {
+      chprio(getpid(), dynprio[proctab[getpid()].prprio].ts_tqexp); //demote process for next time
+    }
     proctab[getpid()].remainpreempt = 0; //remaining preempt is 0, it gets full time slice next time
-    /* CASE 1: CPU BOUND*/
+   /* CASE 1: CPU BOUND*/
 
 		resched();
 	}

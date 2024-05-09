@@ -34,7 +34,9 @@ syscall	sleepms(
 	}
 
   /* CASE 2: IO BOUND, PROMOTE IT */
-  chprio(currpid, dynprio[proctab[currpid].prprio].ts_slpret); // promote priority of the sleeping process
+  if (proctab[currpid].prprio != 12) {
+    chprio(currpid, dynprio[proctab[currpid].prprio].ts_slpret); // promote priority of the sleeping process
+  }
   proctab[currpid].remainpreempt = 0; //set remaining time slice to 0, it gets a full time slice next run
   /* CASE 2: IO BOUND */
 
